@@ -43,7 +43,7 @@ function setVal(value, defaultValue){
    return (value === undefined) ? defaultValue : value;
 }
 
-var app = angular.module('myApp', ['ngRoute', 'firebase', 'ngCookies', 'dndLists']);
+var app = angular.module('myApp', ['ngRoute', 'firebase', 'ngCookies', 'ngDragDrop']);
 
 app.constant('USERS_URL', 'https://appcrud-c9166.firebaseio.com/users');
 

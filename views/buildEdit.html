@@ -1,39 +1,55 @@
-<back-button back="Retour à la liste des builds"></back-button>
-
 <div ng-include="'views/directives/modalItem.html'"></div>
 
-Modification d'informations principales
-<label>Titre</label>
-<input ng-model="build.titre" />
-<label>Type</label>
-<input ng-model="build.type" />
-<label>Lvl</label>
-<input ng-model="build.level" />
-<div id="basicStats">
-  <ul>
-    <li ng-repeat="(key, stat) in build.stats">
-      <input type="number" ng-model="build.stats[key].base" min="0" max="5000"/>
-      <input type="number" ng-model="build.stats[key].bonus" ng-change="updateBox(key)" ng-init="updateBox(key)" min="0" max="100"/>
-      <input type="checkbox" ng-model="bonus[key]" ng-change="updateStats(key)"/>
-    </li>
-    <input ng-change="toggleAll()" type="checkbox" ng-model="bonus['all']" />
-  </ul>
+<div id="buildEdit">
+  <back-button back="Retour à la liste des builds"></back-button>
+
+  <div id="infoUi" ng-if="$root.ui['infos'].bool == 'true'">
+    Modification d'informations principales
+    <label>Titre</label>
+    <input ng-model="build.titre" />
+    <label>Type</label>
+    <input ng-model="build.type" />
+    <label>Lvl</label>
+    <input ng-model="build.level" />
+    <div id="basicStats">
+      <ul>
+        <li ng-repeat="(key, stat) in build.stats">
+          <input type="number" ng-model="build.stats[key].base" min="0" max="5000"/>
+          <input type="number" ng-model="build.stats[key].bonus" ng-change="updateBox(key)" ng-init="updateBox(key)" min="0" max="100"/>
+          <input type="checkbox" ng-model="bonus[key]" ng-change="updateStats(key)"/>
+        </li>
+        <input ng-change="toggleAll()" type="checkbox" ng-model="bonus['all']" />
+      </ul>
+    </div>
+
+    <button ng-click="save()">Sauvegarder</button>
+  </div>
+
+
+  <div id="buildUi" ng-if="$root.ui['build'].bool == 'true'">
+    <p>
+      Liste des items
+    </p>
+    <div class="list-items">
+      <item-template class="itemType" data-type="1" build-id="{{build.$id}}" item="build.items.type1[0]" build="build" item-to-show="itemToShow"></item-template>
+
+      <item-template class="itemType" data-type="2" build-id="{{build.$id}}" item="build.items.type2[0]" build="build" item-to-show="itemToShow"></item-template>
+
+      <item-template class="itemType" data-type="3" build-id="{{build.$id}}" item="build.items.type3[0]" build="build" item-to-show="itemToShow"></item-template>
+    </div>
+
+  </div>
+<div ng-model="build.items.type1[0]" data-drop="true" data-jqyoui-options jqyoui-droppable>
+{{build.items.type1[0].nom}}</div>
+
+  <div ng-if="build.items">
+    <stats-template build="build" spells="spells"></stats-template>
+  </div>
+
+  <div ng-include="'views/itemsUi.html'">
+  </div>
 </div>
 
-<button ng-click="save()">Sauvegarder</button>
-
-<p>
-  Liste des items
-</p>
-<item-template data-type="1" build-id="{{build.$id}}" item="build.items.type1[0]" build="build" item-to-show="itemToShow"></item-template>
-
-<item-template data-type="2" build-id="{{build.$id}}" item="build.items.type2[0]" build="build" item-to-show="itemToShow"></item-template>
-
-<item-template data-type="3" build-id="{{build.$id}}" item="build.items.type3[0]" build="build" item-to-show="itemToShow"></item-template>
-
-<div ng-if="build.items">
-  <stats-template build="build" spells="spells"></stats-template>
-</div>
 
 <div ng-include="'views/uiMenu.html'">
 </div>

@@ -1,49 +1,28 @@
 /**
- * angular-drag-and-drop-lists v2.1.0
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * Copyright (c) 2014 Marcel Juenemann marcel@juenemann.cc
- * Copyright (c) 2014-2017 Google Inc.
- * https://github.com/marceljuenemann/angular-drag-and-drop-lists
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * License: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
  */
-!function(e){function n(e,n){return"all"==n?e:e.filter(function(e){return-1!=n.toLowerCase().indexOf(e)})}var a="application/x-dnd",r="application/json",t="Text",d=["move","copy","link"]
-e.directive("dndDraggable",["$parse","$timeout",function(e,i){return function(l,f,c){f.attr("draggable","true"),c.dndDisableIf&&l.$watch(c.dndDisableIf,function(e){f.attr("draggable",!e)}),f.on("dragstart",function(s){if(s=s.originalEvent||s,"false"==f.attr("draggable"))return!0
-o.isDragging=!0,o.itemType=c.dndType&&l.$eval(c.dndType).toLowerCase(),o.dropEffect="none",o.effectAllowed=c.dndEffectAllowed||d[0],s.dataTransfer.effectAllowed=o.effectAllowed
-var g=l.$eval(c.dndDraggable),u=a+(o.itemType?"-"+o.itemType:"")
-try{s.dataTransfer.setData(u,angular.toJson(g))}catch(p){var v=angular.toJson({item:g,type:o.itemType})
-try{s.dataTransfer.setData(r,v)}catch(p){var D=n(d,o.effectAllowed)
-s.dataTransfer.effectAllowed=D[0],s.dataTransfer.setData(t,v)}}if(f.addClass("dndDragging"),i(function(){f.addClass("dndDraggingSource")},0),s._dndHandle&&s.dataTransfer.setDragImage&&s.dataTransfer.setDragImage(f[0],0,0),e(c.dndDragstart)(l,{event:s}),c.dndCallback){var y=e(c.dndCallback)
-o.callback=function(e){return y(l,e||{})}}s.stopPropagation()}),f.on("dragend",function(n){n=n.originalEvent||n,l.$apply(function(){var a=o.dropEffect,r={copy:"dndCopied",link:"dndLinked",move:"dndMoved",none:"dndCanceled"}
-e(c[r[a]])(l,{event:n}),e(c.dndDragend)(l,{event:n,dropEffect:a})}),o.isDragging=!1,o.callback=void 0,f.removeClass("dndDragging"),f.removeClass("dndDraggingSource"),n.stopPropagation(),i(function(){f.removeClass("dndDraggingSource")},0)}),f.on("click",function(n){c.dndSelected&&(n=n.originalEvent||n,l.$apply(function(){e(c.dndSelected)(l,{event:n})}),n.stopPropagation())}),f.on("selectstart",function(){this.dragDrop&&this.dragDrop()})}}]),e.directive("dndList",["$parse",function(e){return function(i,l,f){function c(e){if(!e)return t
-for(var n=0;n<e.length;n++)if(e[n]==t||e[n]==r||e[n].substr(0,a.length)==a)return e[n]
-return null}function s(e){return o.isDragging?o.itemType||void 0:e==t||e==r?null:e&&e.substr(a.length+1)||void 0}function g(e){return E.disabled?!1:E.externalSources||o.isDragging?E.allowedTypes&&null!==e?e&&-1!=E.allowedTypes.indexOf(e):!0:!1}function u(e,a){var r=d
-return a||(r=n(r,e.dataTransfer.effectAllowed)),o.isDragging&&(r=n(r,o.effectAllowed)),f.dndEffectAllowed&&(r=n(r,f.dndEffectAllowed)),r.length?e.ctrlKey&&-1!=r.indexOf("copy")?"copy":e.altKey&&-1!=r.indexOf("link")?"link":r[0]:"none"}function p(){return T.remove(),l.removeClass("dndDragover"),!0}function v(n,a,r,t,d,l){return e(n)(i,{callback:o.callback,dropEffect:r,event:a,external:!o.isDragging,index:void 0!==d?d:D(),item:l||void 0,type:t})}function D(){return Array.prototype.indexOf.call(m.children,h)}function y(){var e
-return angular.forEach(l.children(),function(n){var a=angular.element(n)
-a.hasClass("dndPlaceholder")&&(e=a)}),e||angular.element("<li class='dndPlaceholder'></li>")}var T=y()
-T.remove()
-var h=T[0],m=l[0],E={}
-l.on("dragenter",function(e){e=e.originalEvent||e
-var n=f.dndAllowedTypes&&i.$eval(f.dndAllowedTypes)
-E={allowedTypes:angular.isArray(n)&&n.join("|").toLowerCase().split("|"),disabled:f.dndDisableIf&&i.$eval(f.dndDisableIf),externalSources:f.dndExternalSources&&i.$eval(f.dndExternalSources),horizontal:f.dndHorizontalList&&i.$eval(f.dndHorizontalList)}
-var a=c(e.dataTransfer.types)
-return a&&g(s(a))?void e.preventDefault():!0}),l.on("dragover",function(e){e=e.originalEvent||e
-var n=c(e.dataTransfer.types),a=s(n)
-if(!n||!g(a))return!0
-if(h.parentNode!=m&&l.append(T),e.target!=m){for(var r=e.target;r.parentNode!=m&&r.parentNode;)r=r.parentNode
-if(r.parentNode==m&&r!=h){var d=r.getBoundingClientRect()
-if(E.horizontal)var o=e.clientX<d.left+d.width/2
-else var o=e.clientY<d.top+d.height/2
-m.insertBefore(h,o?r:r.nextSibling)}}var i=n==t,D=u(e,i)
-return"none"==D?p():f.dndDragover&&!v(f.dndDragover,e,D,a)?p():(e.preventDefault(),i||(e.dataTransfer.dropEffect=D),l.addClass("dndDragover"),e.stopPropagation(),!1)}),l.on("drop",function(e){e=e.originalEvent||e
-var n=c(e.dataTransfer.types),a=s(n)
-if(!n||!g(a))return!0
-e.preventDefault()
-try{var d=JSON.parse(e.dataTransfer.getData(n))}catch(l){return p()}if((n==t||n==r)&&(a=d.type||void 0,d=d.item,!g(a)))return p()
-var y=n==t,T=u(e,y)
-if("none"==T)return p()
-var h=D()
-return f.dndDrop&&(d=v(f.dndDrop,e,T,a,h,d),!d)?p():(o.dropEffect=T,y||(e.dataTransfer.dropEffect=T),d!==!0&&i.$apply(function(){i.$eval(f.dndList).splice(h,0,d)}),v(f.dndInserted,e,T,a,h,d),p(),e.stopPropagation(),!1)}),l.on("dragleave",function(e){e=e.originalEvent||e
-var n=document.elementFromPoint(e.clientX,e.clientY)
-m.contains(n)&&!e._dndPhShown?e._dndPhShown=!0:p()})}}]),e.directive("dndNodrag",function(){return function(e,n,a){n.attr("draggable","true"),n.on("dragstart",function(e){e=e.originalEvent||e,e._dndHandle||(e.dataTransfer.types&&e.dataTransfer.types.length||e.preventDefault(),e.stopPropagation())}),n.on("dragend",function(e){e=e.originalEvent||e,e._dndHandle||e.stopPropagation()})}}),e.directive("dndHandle",function(){return function(e,n,a){n.attr("draggable","true"),n.on("dragstart dragend",function(e){e=e.originalEvent||e,e._dndHandle=!0})}})
-var o={}}(angular.module("dndLists",[]));
+/**
+ * Implementing Drag and Drop functionality in AngularJS is easier than ever.
+ * Demo: http://codef0rmer.github.com/angular-dragdrop/
+ *
+ * @version 1.0.13
+ *
+ * (c) 2013 Amit Gharat a.k.a codef0rmer <amit.2006.it@gmail.com> - amitgharat.wordpress.com
+ */
+!function(e,a,t,n){"use strict";var i=a.module("ngDragDrop",[]).service("ngDragDropService",["$timeout","$parse","$q",function(r,l,o){this.draggableScope=null,this.droppableScope=null,t("head").prepend('<style type="text/css">@charset "UTF-8";.angular-dragdrop-hide{display: none !important;}</style>'),this.callEventCallback=function(e,a,n,i){function r(a){var n=-1!==a.indexOf("(")?a.indexOf("("):a.length,i=-1!==a.lastIndexOf(")")?a.lastIndexOf(")"):a.length,r=a.substring(n+1,i),o=-1!==a.indexOf(".")?a.substr(0,a.indexOf(".")):null;return o=e[o]&&"function"==typeof e[o].constructor?o:null,{callback:a.substring(o&&o.length+1||0,n),args:t.map(r&&r.split(",")||[],function(a){return[l(a)(e)]}),constructor:o}}if(a){var o=r(a),d=o.callback,s=o.constructor,p=[n,i].concat(o.args);return(e[d]||e[s][d]).apply(e[d]?e:e[s],p)}},this.invokeDrop=function(e,l,d,s){var p,c,u,g="",f="",b={},h={},v=null,y={},x={},m=null,D=this.droppableScope,q=this.draggableScope,j=null,k=[];g=e.ngattr("ng-model"),f=l.ngattr("ng-model"),p=q.$eval(g),c=D.$eval(f),m=l.find("[jqyoui-draggable]:last,[data-jqyoui-draggable]:last"),h=D.$eval(l.attr("jqyoui-droppable")||l.attr("data-jqyoui-droppable"))||[],b=q.$eval(e.attr("jqyoui-draggable")||e.attr("data-jqyoui-draggable"))||[],b.index=this.fixIndex(q,b,p),h.index=this.fixIndex(D,h,c),v=a.isArray(p)?b.index:null,y=a.isArray(p)?p[v]:p,b.deepCopy&&(y=a.copy(y)),x=a.isArray(c)&&h&&h.index!==n?c[h.index]:a.isArray(c)?{}:c,h.deepCopy&&(x=a.copy(x)),b.beforeDrop&&k.push(this.callEventCallback(q,b.beforeDrop,d,s)),o.all(k).then(a.bind(this,function(){if(b.insertInline&&g===f){if(b.index>h.index){u=p[b.index];for(var n=b.index;n>h.index;n--)c[n]=a.copy(c[n-1]),c[n-1]={},c[n][b.direction]="left";c[h.index]=u}else{u=p[b.index];for(var n=b.index;n<h.index;n++)c[n]=a.copy(c[n+1]),c[n+1]={},c[n][b.direction]="right";c[h.index]=u}this.callEventCallback(D,h.onDrop,d,s)}else b.animate===!0?(j=e.clone(),j.css({position:"absolute"}).css(e.offset()),t("body").append(j),e.addClass("angular-dragdrop-hide"),this.move(j,m.length>0?m:l,null,"fast",h,function(){j.remove()}),this.move(m.length>0&&!h.multiple?m:[],e.parent("[jqyoui-droppable],[data-jqyoui-droppable]"),i.startXY,"fast",h,a.bind(this,function(){r(a.bind(this,function(){e.css({position:"relative",left:"",top:""}).removeClass("angular-dragdrop-hide"),m.css({position:"relative",left:"",top:"",display:"none"===m.css("display")?"":m.css("display")}),this.mutateDraggable(q,h,b,g,f,x,e),this.mutateDroppable(D,h,b,f,y,v),this.callEventCallback(D,h.onDrop,d,s)}))}))):r(a.bind(this,function(){this.mutateDraggable(q,h,b,g,f,x,e),this.mutateDroppable(D,h,b,f,y,v),this.callEventCallback(D,h.onDrop,d,s)}))}))["finally"](a.bind(this,function(){this.restore(e)}))},this.move=function(a,t,i,r,l,o){if(0===a.length)return o&&e.setTimeout(function(){o()},300),!1;var d=a.css("z-index"),s=a[l.containment||"offset"](),p=t.css("display"),c=t.hasClass("ng-hide"),u=t.hasClass("angular-dragdrop-hide");null===i&&t.length>0&&((t.attr("jqyoui-draggable")||t.attr("data-jqyoui-draggable"))!==n&&t.ngattr("ng-model")!==n&&t.is(":visible")&&l&&l.multiple?(i=t[l.containment||"offset"](),l.stack===!1?i.left+=t.outerWidth(!0):i.top+=t.outerHeight(!0)):(c&&t.removeClass("ng-hide"),u&&t.removeClass("angular-dragdrop-hide"),i=t.css({visibility:"hidden",display:"block"})[l.containment||"offset"](),t.css({visibility:"",display:p}))),a.css({position:"absolute","z-index":9999}).css(s).animate(i,r,function(){c&&t.addClass("ng-hide"),u&&t.addClass("angular-dragdrop-hide"),a.css("z-index",d),o&&o()})},this.mutateDroppable=function(e,t,n,i,r,o){var d=e.$eval(i);e.dndDragItem=r,a.isArray(d)?(t&&t.index>=0?d[t.index]=r:d.push(r),n&&n.placeholder===!0&&(d[d.length-1].jqyoui_pos=o)):(l(i+" = dndDragItem")(e),n&&n.placeholder===!0&&(d.jqyoui_pos=o))},this.mutateDraggable=function(e,t,i,r,o,d,s){var p=a.equals(d,{})||!d,c=e.$eval(r);e.dndDropItem=d,i&&i.placeholder?"keep"!=i.placeholder&&(a.isArray(c)&&i.index!==n?c[i.index]=d:l(r+" = dndDropItem")(e)):a.isArray(c)?p?i&&i.placeholder!==!0&&"keep"!==i.placeholder&&c.splice(i.index,1):c[i.index]=d:(l(r+" = dndDropItem")(e),e.$parent&&l(r+" = dndDropItem")(e.$parent)),this.restore(s)},this.restore=function(e){e.css({"z-index":"",left:"",top:""})},this.fixIndex=function(e,t,i){if(t.applyFilter&&a.isArray(i)&&i.length>0){var r=e[t.applyFilter](),l=r[t.index],o=n;return i.forEach(function(e,t){a.equals(e,l)&&(o=t)}),o}return t.index}}]).directive("jqyouiDraggable",["ngDragDropService",function(e){return{require:"?jqyouiDroppable",restrict:"A",link:function(n,r,l){var o,d,s,p,c=t(r),u=function(r,u){r?(o=n.$eval(c.attr("jqyoui-draggable")||c.attr("data-jqyoui-draggable"))||{},d=n.$eval(l.jqyouiOptions)||{},c.draggable({disabled:!1}).draggable(d).draggable({start:function(a,r){e.draggableScope=n,s=t(d.helper?r.helper:this).css("z-index"),t(d.helper?r.helper:this).css("z-index",9999),i.startXY=t(this)[o.containment||"offset"](),e.callEventCallback(n,o.onStart,a,r)},stop:function(a,i){t(d.helper?i.helper:this).css("z-index",s),e.callEventCallback(n,o.onStop,a,i)},drag:function(a,t){e.callEventCallback(n,o.onDrag,a,t)}})):c.draggable({disabled:!0}),p&&a.isDefined(r)&&(a.equals(l.drag,"true")||a.equals(l.drag,"false"))&&(p(),p=null)};p=n.$watch(function(){return n.$eval(l.drag)},u),u(),c.on("$destroy",function(){c.draggable({disabled:!0}).draggable("destroy")})}}}]).directive("jqyouiDroppable",["ngDragDropService","$q",function(e,n){return{restrict:"A",priority:1,link:function(i,r,l){var o,d,s,p=t(r),c=function(r,c){r?(o=i.$eval(t(p).attr("jqyoui-droppable")||t(p).attr("data-jqyoui-droppable"))||{},d=i.$eval(l.jqyouiOptions)||{},p.droppable({disabled:!1}).droppable(d).droppable({over:function(a,t){e.callEventCallback(i,o.onOver,a,t)},out:function(a,t){e.callEventCallback(i,o.onOut,a,t)},drop:function(r,s){var p=null;p=o.beforeDrop?e.callEventCallback(i,o.beforeDrop,r,s):function(){var e=n.defer();return e.resolve(),e.promise}(),p.then(a.bind(this,function(){t(s.draggable).ngattr("ng-model")&&l.ngModel?(e.droppableScope=i,e.invokeDrop(t(s.draggable),t(this),r,s)):e.callEventCallback(i,o.onDrop,r,s)}),function(){s.draggable.animate({left:"",top:""},d.revertDuration||0)})}})):p.droppable({disabled:!0}),s&&a.isDefined(r)&&(a.equals(l.drop,"true")||a.equals(l.drop,"false"))&&(s(),s=null)};s=i.$watch(function(){return i.$eval(l.drop)},c),c(),p.on("$destroy",function(){p.droppable({disabled:!0}).droppable("destroy")})}}}]);t.fn.ngattr=function(e,a){var t=this[0];return t.getAttribute(e)||t.getAttribute("data-"+e)}}(window,window.angular,window.jQuery);

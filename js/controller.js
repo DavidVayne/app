@@ -28,6 +28,14 @@ app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, 
     "infos" : {
       "name" : "infos",
       "bool" : $cookies.get("infos")
+    },
+    "items" : {
+      "name" : "items",
+      "bool" : $cookies.get("items")
+    },
+    "build" : {
+      "name" : "build",
+      "bool" : $cookies.get("build")
     }
   }
   console.log($rootScope.ui);
@@ -265,10 +273,13 @@ app.controller('BuildIdCtrl', function($scope, $firebase, $rootScope, $location,
   });
 });
 
-app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $location, $http, BuildId, $routeParams, currentAuth, Spells) {
+app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $location, $http, BuildId, $routeParams, currentAuth, Spells, Items) {
   $rootScope.loading = true;
   $scope.itemToShow = {};
   $scope.id = $routeParams.id;
+
+  $scope.items = Items('type1', 30);
+
   $scope.bonus = {
     "fo" : false,
     "age" : false,
@@ -293,9 +304,30 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
     if (build) {
       $scope.build = build;
       console.log(build.type);
-      //$scope.spells = Spells(build.type);
     }
   });
+
+  $scope.directlyAddItem = function(item, key) {
+    console.log('add item');
+    var type = "type" + item.type;
+
+    // construction de l'objet
+    if (!$scope.build.items) {
+      $scope.build['items'] = {}
+    }
+
+    $scope.build.items[type] = [];
+    item['idItem'] = parseInt(key);
+    $scope.build.items[type].push(item);
+    console.log($scope.build.items);
+    // sauvegarde de l'objet
+    $scope.build.$save().then(function(ref) {
+
+    }, function(err) {
+      console.log(err);
+      $scope.directlyaddItemError = err;
+    });
+  }
 
   $scope.save = function() {
     $scope.updatedBuild = {
@@ -328,7 +360,7 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
       $scope.build.stats[key].bonus = 0;
     }
   }
-  
+
   $scope.toggleAll = function() {
     var tempVal = 0;
     if ($scope.bonus.all == true) {
