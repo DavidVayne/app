@@ -1,0 +1,8 @@
+<footer ng-hide="true" ng-controller="FooterCtrl">
+  <ul>
+    <li ng-show="page.footer" ng-repeat="page in menu" ng-if="!page.auth || user != null ">
+      <a href="{{page.url}}">{{page.titre}}</a>
+    </li>
+  </ul>
+
+</footer>

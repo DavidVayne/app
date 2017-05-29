@@ -1,0 +1,12 @@
+<div ng-if="item">
+  <div ng-click="openItem(item)">
+    <span>{{item.nom}}</span>
+  </div>
+  <span ng-click="deleteItem()">Supprimer</span>
+</div>
+
+<div ng-if="!item">
+  <p ng-click="redirectItem()" >
+    Aucun item
+  </p>
+</div>

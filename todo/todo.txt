@@ -1,0 +1,13 @@
+Home build page :
+Builds récemment crées
+Création d'un nouveau build
+Build social plugin
+
+On click "Create a new build"
+-> push in builds arrays
+-> open build/$id du build
+-> push $id in users/builds
+
+"Sauvegarde de build" :
+-> update node build $id
+-> update users/builds/$id node

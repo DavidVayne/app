@@ -1,0 +1,7 @@
+<back-button back="Retour à la liste des items"></back-button>
+<div id="item">
+  {{item.nom}}
+  <a  href="#/set/{{item.set.id}}">{{item.set.nom}}</a>
+</div>
+<a href="#/updateItem/{{$routeParams.id}}">Modifier</a>
+<a ng-click="deleteItem()">Supprimer</a>

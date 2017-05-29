@@ -1,0 +1,12 @@
+<back-button back="Retour au build"></back-button>
+<ul>
+  <li ng-if="items.length != 0" ng-click="addToBuild(item, key)" ng-repeat="(key,item) in items">
+    {{item.nom}}
+    {{key}}
+  </li>
+</ul>
+{{items}}
+
+<div ng-if="isEmpty(items)">
+  Aucun item dans cette catégorie
+</div>

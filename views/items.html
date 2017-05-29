@@ -1,0 +1,21 @@
+<a ng-click="addItem()">Ajouter</a>
+
+Categories
+<ul>
+  <li ng-click="showItems(key)" ng-repeat="(key,cat) in categories">
+    {{cat.nom}}
+  </li>
+</ul>
+
+Items
+
+<ul class="list-group">
+  <li class="list-group-item" ng-repeat="(key,item) in items">
+    <a href="/#/item/{{item.type}}/{{key}}">{{item.nom}}</a>
+    <small ng-hide="item.set">Aucun set</small>
+    <small ng-show="item.set"><a href="#/set/{{item.set.id}}">Set {{item.set.nom}}</a></small>
+  </li>
+  <div ng-if="items == null">
+    Aucun item
+  </div>
+</ul>

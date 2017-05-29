@@ -1,0 +1,70 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>HTML website</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet/less" type="text/css" href="css/style.less">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
+
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+  <base href="/">
+</head>
+
+<body ng-app="myApp">
+  <!-- LIBS -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-cookies.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+  <script>
+    var config = {
+      apiKey: "AIzaSyDJTNHd_r3rb8VxXpp6a6YEYyjTCut_Hts",
+      authDomain: "appcrud-c9166.firebaseapp.com",
+      databaseURL: "https://appcrud-c9166.firebaseio.com",
+      projectId: "appcrud-c9166",
+      storageBucket: "appcrud-c9166.appspot.com",
+      messagingSenderId: "403142194281"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <!-- END LIBS -->
+
+  <!-- CUSTOM -->
+  <script src="libs/js/dragndrop.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/directives.js"></script>
+  <script src="js/controller.js"></script>
+  <!-- CUSTOM -->
+
+  <div id="global" ng-controller="GlobalCtrl">
+    <div class="static" id="header">
+      <div ng-include="'views/header.html'"></div>
+    </div>
+    <div class="dynamic" style="position:relative;">
+      <div class="loading" ng-if="loading" style="position:absolute; width:100%; height:100%; background-color:#fff;">
+        <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i>
+      </div>
+      <main ng-view></main>
+    </div>
+
+
+
+    <div class="static" id="footer">
+      <div ng-include="'views/footer.html'"></div>
+    </div>
+  </div>
+</body>
+</html>

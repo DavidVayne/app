@@ -1,0 +1,19 @@
+
+<div ng-controller="LoginCtrl">
+  Connexion
+  <form id="loginForm">
+    <div class="error-form">{{error}}</div>
+    <input ng-model="loginModel.email" />
+    <input ng-model="loginModel.password" />
+    <button ng-click="doLogin()">Go</button>
+  </form>
+  
+  Inscription
+  <form id="signUp">
+    <div class="error-form">{{errorUp}}</div>
+    <input ng-model="signUpModel.email" />
+    <input ng-model="signUpModel.password" />
+    <button ng-click="signUp()">Go</button>
+  </form>
+
+</div>

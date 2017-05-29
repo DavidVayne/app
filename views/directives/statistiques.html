@@ -1,0 +1,56 @@
+<div id="statistiques"  ng-if="$root.ui['stats'].bool == 'true'">
+  <ul dnd-list="calculatedStats" class="list-group">
+    <li ng-repeat="(key,stat) in calculatedStats" class="list-group-item justify-content-between"
+    dnd-draggable="stat"
+    dnd-moved="calculatedStats.splice($index, 1)">
+      {{key}}
+      <span class="badge badge-default badge-pill">{{stat.max || 0}}</span>
+    </li>
+  </ul>
+  <div ng-if="conditionBool">
+    <ul>
+      <li ng-repeat="item in conditionsResult">
+        {{item.nom}} error ({{item.conditions}})
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<div id="spells" ng-if="$root.ui['spells'].bool == 'true'">
+  <ul id="list-spells">
+    <li ng-repeat="spell in spells">
+      <p ng-click="updateSpellToShow(spell)">
+        {{spell.nom}}
+      </p>
+    </li>
+  </ul>
+
+  <div class="card">
+    <p class="nom-spell" ng-bind="spellToShow.nom"></p>
+    <p ng-bind="spellToShow.description"></p>
+    <ul id="pagination-spells">
+      <li ng-click="updateLevelToShow(spellToShow.dmg.niveau[spellLevel])" ng-repeat="level in spellToShow.dmg.niveau" ng-init="spellLevel = $index">
+        {{spellLevel + 1}}
+      </li>
+    </ul>
+
+    <div ng-if="levelToShow != null" id="spellStats">
+      {{levelToShow.pa}} <br />
+      {{levelToShow.critChance}}% CC (+{{levelToShow.bonuscrit}})<br />
+      <span ng-repeat="row in levelToShow.value">BASE : {{row.min}} à {{row.max}} ({{row.element}})<br /></span><br />
+      <span ng-repeat="row in levelToShow.value">REEL : {{calculDmg(row.element, row.min)}} à {{calculDmg(row.element, row.max)}} ({{row.element}})<br /></span>
+    </div>
+  </div>
+</div>
+
+<!--
+
+<li  ng-repeat="level in spellToShow.dmg.niveau">
+  {{spell.nom}} - {{level.pa}} PA  -- n°{{spell.level}}<br /> {{level.critChance}}% CC (+{{level.bonuscrit}})<br />
+
+  <span ng-repeat="row in level.value">BASE : {{row.min}} à {{row.max}} ({{row.element}})<br /></span><br />
+  <span ng-repeat="row in level.value">REEL : {{calculDmg(row.element, row.min)}} à {{calculDmg(row.element, row.max)}} ({{row.element}})<br /></span>
+</li>
+
+-->

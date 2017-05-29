@@ -1,0 +1,9 @@
+<div ng-controller="UiMenuCtrl" id="uiMenu">
+  <ul class="liste-ui">
+    <li ng-click="changeUi(ui.name)" ng-class="ui.bool == 'true' ? 'active' : 'sleep'" ng-repeat="(key,ui) in $root.ui">
+      <p>
+        {{key}}
+      </p>
+    </li>
+  </ul>
+</div>

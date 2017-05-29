@@ -1,0 +1,9 @@
+<!-- LECTURE ONLY LISTE DES BUILDS AUTH REQUIRED -->
+<button ng-click="createBuild()">Nouveau</button>
+
+<ul>
+  <li ng-repeat="build in builds">
+     <a href="#/build/{{build.$id}}">{{build.titre}}</a>
+     <a class="button" href="#/build/{{build.$id}}/edit">Modifier</a>
+  </li>
+</ul>

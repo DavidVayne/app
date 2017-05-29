@@ -1,0 +1,52 @@
+{
+  "menu" : {
+      "profil" : {
+        "titre" : "Profil",
+        "description" : "description",
+        "url" : "/#/profile",
+        "footer" : true,
+        "header" : true,
+        "auth" : true
+      },
+      "contact" : {
+        "titre" : "Contact",
+        "description" : "description",
+        "url" : "/#/contact",
+        "footer" : true,
+        "header" : false,
+        "auth" : false
+      },
+      "items" : {
+        "titre" : "Items",
+        "description" : "description",
+        "url" : "/#/items",
+        "footer" : true,
+        "header" : true,
+        "auth" : false
+      },
+      "sets" : {
+        "titre" : "Sets",
+        "description" : "description",
+        "url" : "/#/sets",
+        "footer" : true,
+        "header" : true,
+        "auth" : false
+      },
+      "builds" : {
+        "titre" : "Builds",
+        "description" : "Liste des builds",
+        "url" : "/#/builds",
+        "footer" : true,
+        "header" : true,
+        "auth" : true
+      },
+      "weapons" : {
+        "titre" : "Wea",
+        "description": "Liste des weapons",
+        "url" : "/#/weapons",
+        "footer" : true,
+        "header" : true,
+        "auth" : false
+      }
+  }
+}

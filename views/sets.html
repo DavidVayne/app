@@ -1,0 +1,6 @@
+<a ng-click="addSet()">Ajouter</a>
+<ul>
+  <li ng-repeat="(key,set) in sets">
+    <a href="/#/set/{{toNumber(set.$id)}}">{{set.nom}}</a>
+  </li>
+</ul>

@@ -1,0 +1,44 @@
+<back-button back="Retour à la liste des sets"></back-button>
+<div>
+  {{set.nom}}
+</div>
+<ul ng-show="set.items">
+  <li ng-repeat="item in set.items">
+    <a href="/#/item/{{item.type}}/{{item.id}}">{{item.nom}}</a>
+  </li>
+</ul>
+<br/>
+Zone de modification
+<div>
+  <label>Nom</label>
+  <input ng-model="set.nom"/>
+</div>
+<!-- FONCTON SETS/ITEMS
+"Ajouter un item" dans un set ->Ouverture modal avec la liste des items non affectés à des sets
+on click  -> ajout de l'item dans le node sets/set/items
+          -> ajout de set dans le node items/type/item
+Fermeture du modal
+
+Ajouter un item tout court : ->Selection de la categories
+                             ->Ajout dans la categorie choisie
+
+
+Supprimer un item -> Supression dans le node items/type/item
+                  -> Si item.set, supprimer l'item dans sets/set/items
+
+Modification d'un item -> Modification dans le node items/type/item
+                       -> Si item.set, modifier le node sets/items/(item.set)
+
+Ajout d'un set -> Ajouter un set dans le node sets/set
+
+Supression d'un set -> Suppression dans le node sets/set
+
+Modification d'un set -> Modification dans le node sets/set
+                      -> Modification dans tous les nodes items/type/item/set
+!-->
+<div ng-repeat="setItem in set.items">
+  <input ng-model="setItem.nom"/>
+</div>
+
+<button ng-click="set.$save()">Sauvegarder</button>
+<a ng-click="removeSet(set)">Supprimer</a>
