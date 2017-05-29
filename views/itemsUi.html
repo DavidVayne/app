@@ -1,0 +1,7 @@
+<div id="itemsUi" ng-if="$root.ui['items'].bool == 'true'">
+  <ul class="list-items list-group">
+    <li jqyoui-draggable="{animate:true}" data-jqyoui-options="{revert: 'invalid'}" data-drag="true" class="list-group-item" ng-model="items[key]" ng-repeat="(key,item) in items">
+      <a ng-dblclick="directlyAddItem(item, key)">{{item.nom}}</a>
+    </li>
+  </ul>
+</div>
