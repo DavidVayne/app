@@ -21,10 +21,9 @@ app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, 
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     $rootScope.user = firebaseUser;
-    UserService($rootScope.user.uid).$bindTo($scope, "userData");
-    /*$scope.userData.$loaded().then(function(err) {
-      $rootScope.customUi = $scope.userData.customUi;
-    });*/
+    if($rootScope.user) {
+      UserService($rootScope.user.uid).$bindTo($scope, "userData");
+    }
   });
 
   $rootScope.typeLimit = {
@@ -273,7 +272,33 @@ app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, 
     $scope.newBuild = {
       "type": 1,
       "titre": "Nouveau build",
-      "items" : TEMPLATE_ITEM
+      "items" : TEMPLATE_ITEM,
+      "stats" : {
+        "fo" : {
+          "bonus" : 0,
+          "base" : 0
+        },
+        "age" : {
+          "bonus" : 0,
+          "base" : 0
+        },
+        "cha" : {
+          "bonus" : 0,
+          "base" : 0
+        },
+        "ine" : {
+          "bonus" : 0,
+          "base" : 0
+        },
+        "vita" : {
+          "bonus" : 0,
+          "base" : 0
+        },
+        "sa" : {
+          "bonus" : 0,
+          "base" : 0
+        }
+      }
     };
     $scope.builds.$add($scope.newBuild).then(function(ref) {
       $scope.newBuild.userId = currentAuth.uid;
@@ -330,6 +355,7 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
     "ine" : false,
     "vi" : false,
     "sa" : false,
+    "cha" : false,
     "all": false
   }
   $scope.selectedType = "all";
@@ -346,10 +372,13 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
   });
 
 
-  $scope.$watch("build", function(build) {
-    if (build) {
-      $scope.build = build;
-      console.log(build.type);
+  $scope.$watch("build", function(build, old) {
+    if (build != old) {
+      $scope.build.$save().then(function(ref) {
+
+      }, function(err) {
+        $scope.build = build;
+      });
     }
   });
 
