@@ -19,7 +19,12 @@ app.factory("Items", ["$firebaseObject",
     return function(type,limit) {
       console.log('id is : ' + type);
       var ref = firebase.database().ref("items");
-      var itemsRef = ref.child(type).limitToLast(limit);
+      if(type != "typeall") {
+        var itemsRef = ref.child(type).limitToLast(limit);
+      }
+      else {
+        var itemsRef = ref;
+      }
       return $firebaseObject(itemsRef);
     }
   }

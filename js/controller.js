@@ -12,6 +12,10 @@ app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, 
     "3": 1,
     "4": 2
   }
+  $rootScope.listType = {
+    "1" : "Type 1",
+    "2" : "Type 2"
+  }
   $rootScope.ui = {
     "spells" : {
       "name" : "spells",
@@ -277,9 +281,16 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
   $rootScope.loading = true;
   $scope.itemToShow = {};
   $scope.id = $routeParams.id;
-
-  $scope.items = Items('type1', 30);
-
+  /*localStorage.items = undefined;
+  localStorage.clear();
+  if (localStorage.items) {
+    $scope.items = JSON.parse(localStorage.items);
+    console.log($scope.items);
+  } else {
+    $scope.items = Items('type1', 30);
+    localStorage.items = JSON.stringify(Items('type1',30));
+  }*/
+  $scope.items = Items('type1',30);
   $scope.bonus = {
     "fo" : false,
     "age" : false,
@@ -288,6 +299,8 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
     "sa" : false,
     "all": false
   }
+  $scope.selectedType = "all";
+
   $scope.build = BuildId($scope.id);
 
   $scope.build.$loaded().then(function() {
@@ -371,6 +384,21 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
         $scope.bonus[e] = $scope.bonus.all;
         $scope.build.stats[e].bonus = tempVal;
       }
+    }
+  }
+
+  $scope.updateListItems = function(value) {
+    if (value != "all") {
+      $scope.items = Items('type' + value, 30);
+    }
+    else {
+      $scope.snapshot = Items('type' + value, 30);
+      $scope.items = {};
+      $scope.snapshot.$loaded().then(function() {
+        $scope.snapshot.forEach(function(e) {
+          $scope.items = Object.assign($scope.items, e);
+        });
+      });
     }
   }
 });

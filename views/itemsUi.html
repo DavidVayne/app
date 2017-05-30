@@ -1,4 +1,11 @@
 <div id="itemsUi" ng-if="$root.ui['items'].bool == 'true'">
+  <select ng-change="updateListItems(selectedType)" ng-model="selectedType" class="custom-select mb-2 mr-sm-2 mb-sm-0" id="filterItems">
+    <option value="all" selected>Tous les items</option>
+    <option value="{{key}}" ng-repeat="(key,type) in $root.listType">
+      {{type}}
+    </option>
+  </select>
+  {{selectedType}}
   <ul class="list-items list-group">
     <li jqyoui-draggable="{animate:true}" data-jqyoui-options="{revert: 'invalid'}" data-drag="true" class="list-group-item" ng-model="items[key]" ng-repeat="(key,item) in items">
       <a ng-dblclick="directlyAddItem(item, key)">{{item.nom}}</a>
