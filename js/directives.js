@@ -2,21 +2,26 @@ function calculStats(build, stats) {
   var items = build.items;
   var a = {}
   for ( i in items) {
-    a = merge(a, items[i][0].stats);
+    if (items[i][0]) {
+        a = merge(a, items[i][0].stats);
+    }
   }
   return merge(stats, addStats(a, build.stats));
 }
 
 function conditions(items, stats)  {
   var result = [];
+
   for (i in items) {
-    var conditions = items[i][0].conditions;
-    for (e in conditions) {
-      if(stats[e].max > conditions[e].max) {
-        result.push(items[i][0]);
-      }
-      else if(stats[e].max < conditions[e].min) {
-        result.push(items[i][0]);
+    if(items[i][0]) {
+      var conditions = items[i][0].conditions;
+      for (e in conditions) {
+        if(stats[e].max > conditions[e].max) {
+          result.push(items[i][0]);
+        }
+        else if(stats[e].max < conditions[e].min) {
+          result.push(items[i][0]);
+        }
       }
     }
   }
@@ -119,16 +124,16 @@ app.directive("statsTemplate", function($location, $http) {
     },
     templateUrl: 'views/directives/statistiques.html',
     link: function($scope, element, attrs) {
-      $scope.spellToShow = {}
+      $scope.spellToShow = null;
       $http.get('views/directives/jsontype.json').then(function(result) {
         $scope.stats = result.data.stats;
         $scope.$watch("build",function(newValue,oldValue) {
           $scope.calculatedStats = calculStats($scope.build, $scope.stats);
-          console.log($scope.calculatedStats);
           $scope.conditionsResult = conditions($scope.build.items, $scope.calculatedStats);
           if($scope.conditionsResult.length > 0) {
             $scope.conditionBool = true;
           }
+
         }, true);
       });
       $scope.calculDmg = function(element, value)  {
@@ -144,6 +149,10 @@ app.directive("statsTemplate", function($location, $http) {
 
       $scope.updateSpellToShow = function(spell) {
         $scope.spellToShow = spell;
+        if(spell) {
+          // si l'utilisateur demande d'afficher un spell, on affiche le dernier niveau du spell
+          $scope.updateLevelToShow(spell.dmg.niveau[spell.dmg.niveau.length - 1]);
+        }
       }
       $scope.updateLevelToShow = function(level) {
         console.log(level);

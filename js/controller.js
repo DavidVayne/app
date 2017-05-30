@@ -3,9 +3,30 @@
 app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, UserService, Auth, Database, $cookies) {
   $rootScope.db = Database;
   $rootScope.loading = false;
+
+  $rootScope.customUi = {
+    "items" : {
+      "color" : "#fff",
+      "layout" : "grid"
+    },
+    "stats" : {
+      "order" : {
+        "fo" : 1,
+        "age" : 2,
+        "ine" : 3,
+        "cha" : 4
+      }
+    }
+  }
+
   Auth.$onAuthStateChanged(function(firebaseUser) {
     $rootScope.user = firebaseUser;
+    UserService($rootScope.user.uid).$bindTo($scope, "userData");
+    /*$scope.userData.$loaded().then(function(err) {
+      $rootScope.customUi = $scope.userData.customUi;
+    });*/
   });
+
   $rootScope.typeLimit = {
     "1": 1,
     "2": 1,
@@ -16,6 +37,7 @@ app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, 
     "1" : "Type 1",
     "2" : "Type 2"
   }
+
   $rootScope.ui = {
     "spells" : {
       "name" : "spells",
@@ -42,7 +64,6 @@ app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, 
       "bool" : $cookies.get("build")
     }
   }
-  console.log($rootScope.ui);
 });
 
 app.controller('HomeCtrl', function($scope, $firebase, $rootScope, $location, UserService, currentAuth) {
@@ -151,7 +172,9 @@ app.controller('LoginCtrl', function($scope, $firebase, $rootScope, $location, A
   $scope.doLogin = function() {
     $scope.error = null;
     Auth.$signInWithEmailAndPassword($scope.loginModel.email, $scope.loginModel.password).then(function(firebaseUser) {
-      console.log("Signed in as:", firebaseUser.uid);
+      firebase.database().ref('users/' + firebaseUser.uid).ref('customUi').set({
+        //$rootScope.customUi
+      });
       $('#loginModal').modal('hide');
       $rootScope.user = firebaseUser;
     }).catch(function(error) {
@@ -249,7 +272,8 @@ app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, 
   $scope.createBuild = function() {
     $scope.newBuild = {
       "type": 1,
-      "titre": "Nouveau build"
+      "titre": "Nouveau build",
+      "items" : TEMPLATE_ITEM
     };
     $scope.builds.$add($scope.newBuild).then(function(ref) {
       $scope.newBuild.userId = currentAuth.uid;
@@ -290,7 +314,16 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
     $scope.items = Items('type1', 30);
     localStorage.items = JSON.stringify(Items('type1',30));
   }*/
-  $scope.items = Items('type1',30);
+  var ts = Items('typeall',30);
+
+  $scope.items = {};
+  ts.$loaded().then(function() {
+    ts.forEach(function(e) {
+      $scope.items = Object.assign($scope.items, e);
+    });
+  });
+
+
   $scope.bonus = {
     "fo" : false,
     "age" : false,
