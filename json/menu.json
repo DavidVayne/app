@@ -47,6 +47,14 @@
         "footer" : true,
         "header" : true,
         "auth" : false
+      },
+      "weapons" : {
+        "titre" : "Compare",
+        "description": "Comparer des builds",
+        "url" : "/#/compare",
+        "footer" : true,
+        "header" : true,
+        "auth" : true
       }
   }
 }

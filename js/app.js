@@ -3,28 +3,6 @@
 window.onerror = function(){
    return true;
 }
-const TEMPLATE_ITEM = {
-  "type0" : [ {
-	  "conditions" : null,
-	  "description" : "description",
-	  "idItem" : 0,
-	  "niveau" : 0,
-	  "nom" : "item template",
-	  "set" : false,
-	  "stats" : {
-		"cha" : {
-		  "max" : 0,
-		  "min" : 0
-		},
-		"fo" : {
-		  "max" : 0,
-		  "min" : 0
-		}
-	  },
-	  "type" : 0,
-	  "visuel" : "assets/items/item0.png"
-	}]
-}
 
 function getName(authData) {
   switch (authData.providerData[0].providerId) {
@@ -158,6 +136,15 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/profile', {
       templateUrl: 'views/profile.html',
       controller: 'ProfileCtrl',
+      resolve: {
+        "currentAuth": ["Auth", function(Auth) {
+          return Auth.$requireSignIn();
+        }]
+      }
+    })
+    .when('/compare', {
+      templateUrl: 'views/buildsCompare.html',
+      controller: 'CompareCtrl',
       resolve: {
         "currentAuth": ["Auth", function(Auth) {
           return Auth.$requireSignIn();

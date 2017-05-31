@@ -1,9 +1,19 @@
 <!-- LECTURE ONLY LISTE DES BUILDS AUTH REQUIRED -->
-<button ng-click="createBuild()">Nouveau</button>
-
 <ul>
-  <li ng-repeat="build in builds">
-     <a href="#/build/{{build.$id}}">{{build.titre}}</a>
+  <li ng-click="createBuild(key)" ng-repeat="(key,perso) in $root.listePersos">
+    {{perso.name}}
+  </li>
+</ul>
+<ul>
+  <li ng-repeat="build in builds | filter:{'type': filterVar}:true">
+     <a href="#/build/{{build.$id}}">{{build.titre}} -- {{build.type}}</a>
      <a class="button" href="#/build/{{build.$id}}/edit">Modifier</a>
+     <a class="button" ng-click="deleteBuild(build.$id)">Supprimer</a>
+  </li>
+</ul>
+
+<ul id="creationFilterUl">
+  <li ng-click="toggleFilter(key, $event)" ng-repeat="(key,perso) in $root.listePersos">
+    {{perso.name}}
   </li>
 </ul>

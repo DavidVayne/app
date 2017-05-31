@@ -4,20 +4,7 @@ app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, 
   $rootScope.db = Database;
   $rootScope.loading = false;
 
-  $rootScope.customUi = {
-    "items" : {
-      "color" : "#fff",
-      "layout" : "grid"
-    },
-    "stats" : {
-      "order" : {
-        "fo" : 1,
-        "age" : 2,
-        "ine" : 3,
-        "cha" : 4
-      }
-    }
-  }
+  $rootScope.customUi = CUSTOM_UI;
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     $rootScope.user = firebaseUser;
@@ -26,16 +13,11 @@ app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, 
     }
   });
 
-  $rootScope.typeLimit = {
-    "1": 1,
-    "2": 1,
-    "3": 1,
-    "4": 2
-  }
-  $rootScope.listType = {
-    "1" : "Type 1",
-    "2" : "Type 2"
-  }
+  $rootScope.typeLimit = TYPE_LIMIT;
+
+  $rootScope.listType = LIST_TYPE
+
+  $rootScope.listePersos = LISTE_PERSOS;
 
   $rootScope.ui = {
     "spells" : {
@@ -267,41 +249,17 @@ app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, 
     $scope.nbBuilds = $scope.builds.length;
     $rootScope.loading = false;
   });
+  $scope.filterVar = undefined;
+  $scope.createBuild = function(id) {
 
-  $scope.createBuild = function() {
     $scope.newBuild = {
-      "type": 1,
-      "titre": "Nouveau build",
-      "items" : TEMPLATE_ITEM,
-      "stats" : {
-        "fo" : {
-          "bonus" : 0,
-          "base" : 0
-        },
-        "age" : {
-          "bonus" : 0,
-          "base" : 0
-        },
-        "cha" : {
-          "bonus" : 0,
-          "base" : 0
-        },
-        "ine" : {
-          "bonus" : 0,
-          "base" : 0
-        },
-        "vita" : {
-          "bonus" : 0,
-          "base" : 0
-        },
-        "sa" : {
-          "bonus" : 0,
-          "base" : 0
-        }
-      }
+      "type": parseInt(id),
+      "titre": "Nouveau build"
     };
     $scope.builds.$add($scope.newBuild).then(function(ref) {
       $scope.newBuild.userId = currentAuth.uid;
+      $scope.newBuild.stats = TEMPLATE_STATS;
+      $scope.newBuild.items = TEMPLATE_ITEM;
       $rootScope.db.ref('buildID').child(ref.key).set($scope.newBuild, function(error) {
         if (error) {} else {
           console.log('allright');
@@ -312,6 +270,24 @@ app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, 
         }
       });
     });
+  }
+
+  $scope.deleteBuild = function(id) {
+    $rootScope.db.ref('builds').child(currentAuth.uid).child(id).set(null)
+    .then(function() {
+      $rootScope.db.ref('buildID').child(id).set(null).then(function() {
+        console.log('supprimé');
+      });
+    })
+    .catch(function(error) {
+      console.log('Synchronization failed');
+    });
+  }
+
+  $scope.toggleFilter = function(key, $event) {
+    $('#creationFilterUl li').removeClass('active');
+    $($event.currentTarget).addClass('active');
+    $scope.filterVar = parseInt(key);
   }
 });
 
@@ -500,3 +476,8 @@ app.controller('ItemsTypeCtrl', function($scope, $firebase, $rootScope, $locatio
 });
 
 app.controller('ModalItemCtrl', function($scope, $firebase, $rootScope, $location, $http, $routeParams, Item) {});
+
+
+app.controller('CompareCtrl', function($scope, $firebase, $rootScope, $location, $http, $routeParams, currentAuth, BuildId) {
+  console.log('comparaison');
+});
