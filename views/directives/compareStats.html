@@ -1,0 +1,7 @@
+stats
+<ul class="list-group">
+  <li ng-repeat="(key,stat) in compareModel.build1.stats" class="list-group-item justify-content-between">
+    {{$root.names[key] || key}}
+    <span ng-class="getClass(stat.max - compareModel.build2.stats[key].max)" class="badge badge-default badge-pill">{{(stat.max - compareModel.build2.stats[key].max) || 0}}</span>
+  </li>
+</ul>

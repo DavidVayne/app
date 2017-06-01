@@ -1,8 +1,8 @@
 'use strict';
 
-window.onerror = function(){
+/*window.onerror = function(){
    return true;
-}
+}*/
 
 function getName(authData) {
   switch (authData.providerData[0].providerId) {
@@ -150,6 +150,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
           return Auth.$requireSignIn();
         }]
       }
+    })
+    .when('/resultCompare/:firstBuild/:secondBuild', {
+      templateUrl: 'views/resultCompare.html',
+      controller: 'ResultCompareCtrl'
     })
     .otherwise({
       redirectTo: '/home'

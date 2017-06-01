@@ -3,7 +3,7 @@
 app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, UserService, Auth, Database, $cookies) {
   $rootScope.db = Database;
   $rootScope.loading = false;
-
+  $rootScope.names = NAMES_TEMPLATE;
   $rootScope.customUi = CUSTOM_UI;
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
@@ -478,6 +478,49 @@ app.controller('ItemsTypeCtrl', function($scope, $firebase, $rootScope, $locatio
 app.controller('ModalItemCtrl', function($scope, $firebase, $rootScope, $location, $http, $routeParams, Item) {});
 
 
-app.controller('CompareCtrl', function($scope, $firebase, $rootScope, $location, $http, $routeParams, currentAuth, BuildId) {
-  console.log('comparaison');
+app.controller('CompareCtrl', function($scope, $firebase, $rootScope, $location, $http, $routeParams, currentAuth, Builds) {
+  $rootScope.loading = true;
+  $scope.builds = Builds(currentAuth.uid);
+  $scope.builds.$loaded().then(function() {
+    $scope.nbBuilds = $scope.builds.length;
+    $rootScope.loading = false;
+  });
+  $scope.modelCompare = {
+    "firstBuild" : null,
+    "secondBuild" : null
+  }
+
+  $scope.compare = function() {
+    var p1 = $scope.modelCompare.secondBuild;
+    var p2 = $scope.modelCompare.firstBuild;
+    if(p1 != null && p2 != null) {
+      if(p1 == p2) {
+        $scope.errorCompare = "Erreur même selection";
+      }
+      else {
+        $location.path('/resultCompare/' + p1.$id + '/' + p2.$id);
+      }
+    }
+    else {
+      $scope.errorCompare = "Erreur lors de la séléction";
+    }
+  }
+});
+
+
+app.controller('ResultCompareCtrl', function($scope, $firebase, $rootScope, $location, $http, $routeParams, BuildId, Spells) {
+  $scope.loadingCompare = true;
+  $scope.p1 = $routeParams.firstBuild;
+  $scope.p2 = $routeParams.secondBuild;
+
+  $scope.build1 = BuildId($scope.p1);
+  $scope.build2 = BuildId($scope.p2);
+
+  $scope.build1.$loaded().then(function() {
+    $scope.spells1 = Spells('common');
+    $scope.build2.$loaded().then(function() {
+      $scope.spells2 = Spells('common');
+      $scope.loadingCompare = false;
+    });
+  });
 });

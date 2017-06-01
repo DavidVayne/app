@@ -86,3 +86,48 @@ const TEMPLATE_STATS = {
     "base" : 0
   }
 }
+
+const COMPLETE_STATS = {
+  "stats" : {
+    "fo" : {
+      "max" : 0,
+      "min" : 0
+    },
+    "age" : {
+      "max" : 0,
+      "min" : 0
+    },
+    "cha" : {
+      "max" : 0,
+      "min" : 0
+    },
+    "ine" : {
+      "max" : 0,
+      "min" : 0
+    },
+    "vi" : {
+      "max" : 0,
+      "min" : 0
+    },
+    "pui" : {
+      "max" : 0,
+      "min" : 0
+    },
+    "do" : {
+      "max" : 0,
+      "min" : 0
+    },
+    "dofo" : {
+      "max" : 0,
+      "min" : 0
+    },
+    "doneu" : {
+      "max" : 0,
+      "min" : 0
+    }
+  }
+}
+
+const NAMES_TEMPLATE = {
+  "fo" : "Fo"
+}

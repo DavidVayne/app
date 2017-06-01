@@ -1,1 +1,19 @@
 <!-- COMPARAISON DE BUILDS -->
+premiere liste
+<ul>
+  <li ng-click="modelCompare.firstBuild = build" ng-repeat="build in builds">
+     <a>{{build.titre}} -- {{build.type}}</a>
+  </li>
+</ul>
+
+seconde liste
+<ul>
+  <li ng-click="modelCompare.secondBuild = build" ng-repeat="build in builds">
+     <a>{{build.titre}} -- {{build.type}}</a>
+  </li>
+</ul>
+
+<button ng-click="compare()">Process</button>
+
+
+{{errorCompare}}

@@ -28,6 +28,16 @@ function conditions(items, stats)  {
   return result;
 }
 
+function calculateurDmg(element, value, stats)  {
+  if(element == 'neu') {
+    return value + value * ((stats['fo'].max + stats['pui'].max)/100) + stats['do'].max + stats['do' + element].max;
+  }
+  if (stats[element]) {
+    return value + value * ((stats[element].max + stats['pui'].max)/100) + stats['do'].max + stats['do' + element].max;
+  }
+  return value;
+}
+
 function addStats(stats, build) {
   for (i in build) {
     if (stats[i]) {
@@ -125,26 +135,17 @@ app.directive("statsTemplate", function($location, $http) {
     templateUrl: 'views/directives/statistiques.html',
     link: function($scope, element, attrs) {
       $scope.spellToShow = null;
-      $http.get('views/directives/jsontype.json').then(function(result) {
-        $scope.stats = result.data.stats;
-        $scope.$watch("build",function(newValue,oldValue) {
-          $scope.calculatedStats = calculStats($scope.build, $scope.stats);
-          $scope.conditionsResult = conditions($scope.build.items, $scope.calculatedStats);
-          if($scope.conditionsResult.length > 0) {
-            $scope.conditionBool = true;
-          }
+      $scope.stats = COMPLETE_STATS;
+      $scope.$watch("build",function(newValue,oldValue) {
+        $scope.calculatedStats = calculStats($scope.build, $scope.stats);
+        $scope.conditionsResult = conditions($scope.build.items, $scope.calculatedStats);
+        if($scope.conditionsResult.length > 0) {
+          $scope.conditionBool = true;
+        }
+      }, true);
 
-        }, true);
-      });
       $scope.calculDmg = function(element, value)  {
-        var stats = $scope.calculatedStats;
-        if(element == 'neu') {
-          return value + value * ((stats['fo'].max + stats['pui'].max)/100) + stats['do'].max + stats['do' + element].max;
-        }
-        if (stats[element]) {
-          return value + value * ((stats[element].max + stats['pui'].max)/100) + stats['do'].max + stats['do' + element].max;
-        }
-        return value;
+        calculateurDmg(element,value, $scope.calculatedStats);
       }
 
       $scope.updateSpellToShow = function(spell) {
@@ -157,6 +158,51 @@ app.directive("statsTemplate", function($location, $http) {
       $scope.updateLevelToShow = function(level) {
         console.log(level);
         $scope.levelToShow = level;
+      }
+    }
+  };
+});
+
+app.directive("compareStats", function($location, $http, $timeout) {
+  return {
+    restrict: 'E',
+    scope: {
+      build1: '=',
+      spells1: '=',
+      build2: '=',
+      spells2: '='
+    },
+    templateUrl: 'views/directives/compareStats.html',
+    link: function($scope, element, attrs) {
+      $scope.compareModel = {
+        "build1" : {
+          "build" : $scope.build1,
+          "stats" : COMPLETE_STATS.stats,
+          "spells" : $scope.spells1
+        },
+        "build2" : {
+          "build" : $scope.build2,
+          "stats" : COMPLETE_STATS.stats,
+          "spells" : $scope.spells2
+        }
+      }
+      $scope.$watchGroup(['build1', 'build2'], function(newValues, oldValues, scope) {
+        if(newValues) {
+            $scope.compareModel.build1.stats = calculStats($scope.build1, COMPLETE_STATS.stats);
+            console.log($scope.compareModel);
+            $scope.compareModel.build2.stats = calculStats($scope.build2, COMPLETE_STATS.stats);
+        }
+      });
+      $scope.getClass = function (value) {
+        if (value > 0) {
+          return 'badge-success';
+        }
+        else if (value == 0){
+          return 'badge-default';
+        }
+        else if (value < 0) {
+          return 'badge-danger';
+        }
       }
     }
   };

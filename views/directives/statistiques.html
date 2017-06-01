@@ -1,9 +1,11 @@
 <div id="statistiques"  ng-if="$root.ui['stats'].bool == 'true'">
+  {{calculatedStats}}
   <ul dnd-list="calculatedStats" class="list-group">
     <li ng-repeat="(key,stat) in calculatedStats" class="list-group-item justify-content-between"
     dnd-draggable="stat"
     dnd-moved="calculatedStats.splice($index, 1)">
-      {{key}}
+
+      {{$root.names[key] || key}}
       <span class="badge badge-default badge-pill">{{stat.max || 0}}</span>
     </li>
   </ul>
