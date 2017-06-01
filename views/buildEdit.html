@@ -14,7 +14,7 @@
     <div id="basicStats">
       <ul>
         <li ng-repeat="(key, stat) in build.stats">
-          <input type="number" ng-model="build.stats[key].base" min="0" max="5000"/>
+          <input type="number" ng-model="build.stats[key].base" ng-change="build.$save()" min="0" max="5000"/>
           <input type="number" ng-model="build.stats[key].bonus" ng-change="updateBox(key)" ng-init="updateBox(key)" min="0" max="100"/>
           <input type="checkbox" ng-model="bonus[key]" ng-change="updateStats(key)"/>
         </li>

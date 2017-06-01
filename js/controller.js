@@ -251,10 +251,12 @@ app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, 
   });
   $scope.filterVar = undefined;
   $scope.createBuild = function(id) {
-
+    var d = new Date();
+    var n = d.getTime();
     $scope.newBuild = {
       "type": parseInt(id),
-      "titre": "Nouveau build"
+      "titre": "Nouveau build",
+      "dateCrea": new Date().getTime()
     };
     $scope.builds.$add($scope.newBuild).then(function(ref) {
       $scope.newBuild.userId = currentAuth.uid;
@@ -287,7 +289,14 @@ app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, 
   $scope.toggleFilter = function(key, $event) {
     $('#creationFilterUl li').removeClass('active');
     $($event.currentTarget).addClass('active');
-    $scope.filterVar = parseInt(key);
+    console.log(key);
+    if(key == '') {
+      $scope.filterVar = key;
+    }
+    else {
+        $scope.filterVar = parseInt(key);
+    }
+    console.log($scope.filterVar);
   }
 });
 
@@ -402,6 +411,10 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
     if ($scope.build.stats[key].bonus == 100) {
       $scope.bonus[key] = true;
     }
+    $scope.build.$save().then(function(ref) {
+    }, function(err) {
+      console.log(err);
+    });
   }
   $scope.updateStats = function(key) {
     if($scope.bonus[key]) {
@@ -410,6 +423,10 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
     else {
       $scope.build.stats[key].bonus = 0;
     }
+    $scope.build.$save().then(function(ref) {
+    }, function(err) {
+      console.log(err);
+    });
   }
 
   $scope.toggleAll = function() {
@@ -417,12 +434,18 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
     if ($scope.bonus.all == true) {
       tempVal = 100
     }
-    for(e in $scope.bonus) {
+
+    for (var e in $scope.bonus) {
       if(e != 'all') {
+        console.log($scope.bonus[e]);
         $scope.bonus[e] = $scope.bonus.all;
         $scope.build.stats[e].bonus = tempVal;
       }
     }
+    $scope.build.$save().then(function(ref) {
+    }, function(err) {
+      console.log(err);
+    });
   }
 
   $scope.updateListItems = function(value) {

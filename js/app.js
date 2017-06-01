@@ -43,16 +43,17 @@ function setVal(value, defaultValue){
    return (value === undefined) ? defaultValue : value;
 }
 
-var app = angular.module('myApp', ['ngRoute', 'firebase', 'ngCookies', 'ngDragDrop']);
+var app = angular.module('myApp', ['ngRoute', 'firebase', 'ngCookies', 'ngDragDrop', 'angularMoment']);
 
 app.constant('USERS_URL', 'https://appcrud-c9166.firebaseio.com/users');
 
-app.run(["$rootScope", "$location", function($rootScope, $location) {
+app.run(["$rootScope", "$location", function($rootScope, $location, amMoment) {
   $rootScope.$on("$routeChangeError", function(event, next, previous, error) {
     if (error === "AUTH_REQUIRED") {
       $location.path("/home");
     }
   });
+  amMoment.changeLocale('fr');
 }]);
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {

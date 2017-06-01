@@ -23,13 +23,28 @@ const TEMPLATE_ITEM = {
 const LISTE_PERSOS = {
   "1" : {
     "name" : "nom type 1",
-    "visuel" : "assets/blabla.png",
+    "visuel" : "http://via.placeholder.com/50x50",
     "type" : 1
   },
   "2" : {
     "name" : "nom type 2",
-    "visuel" : "assets/blabla.png",
+    "visuel" : "http://via.placeholder.com/50x50",
     "type" : 2
+  },
+  "3" : {
+    "name" : "nom type 3",
+    "visuel" : "http://via.placeholder.com/50x50",
+    "type" : 3
+  },
+  "4" : {
+    "name" : "nom type 4",
+    "visuel" : "http://via.placeholder.com/50x50",
+    "type" : 4
+  },
+  "5" : {
+    "name" : "nom type 5",
+    "visuel" : "http://via.placeholder.com/50x50",
+    "type" : 5
   }
 }
 
@@ -77,7 +92,7 @@ const TEMPLATE_STATS = {
     "bonus" : 0,
     "base" : 0
   },
-  "vita" : {
+  "vi" : {
     "bonus" : 0,
     "base" : 0
   },
