@@ -22,27 +22,27 @@ app.controller('GlobalCtrl', function($scope, $firebase, $rootScope, $location, 
   $rootScope.ui = {
     "spells" : {
       "name" : "spells",
-      "bool" : $cookies.get("spells")
+      "bool" : $cookies.get("spells") || true
     },
     "stats" : {
       "name" : "stats",
-      "bool" : $cookies.get("stats")
+      "bool" : $cookies.get("stats") || true
     },
     "sets" : {
       "name" : "sets",
-      "bool" : $cookies.get("sets")
+      "bool" : $cookies.get("sets") || true
     },
     "infos" : {
       "name" : "infos",
-      "bool" : $cookies.get("infos")
+      "bool" : $cookies.get("infos") || true
     },
     "items" : {
       "name" : "items",
-      "bool" : $cookies.get("items")
+      "bool" : $cookies.get("items") || true
     },
     "build" : {
       "name" : "build",
-      "bool" : $cookies.get("build")
+      "bool" : $cookies.get("build") || true
     }
   }
 });
@@ -118,12 +118,28 @@ app.controller('SetsCtrl', function($scope, $firebase, $rootScope, $location, Au
   }
 });
 
-app.controller('SetIdCtrl', function($scope, $firebase, $rootScope, $location, Auth, SingleSet, $routeParams) {
+app.controller('SetIdCtrl', function($scope, $firebase, $rootScope, $location, Auth, SingleSet, $routeParams, Sets) {
   $scope.id = $routeParams.id;
   $scope.set = SingleSet('set' + $scope.id);
-  $scope.removeSet = function(set) {
+  /*$scope.removeSet = function(set) {
     set.$remove();
     history.back();
+  }*/
+  $scope.setsResult = {
+    "bool" : false
+  }
+
+  $scope.getCompatible = function(set) {
+    $scope.resultC = [];
+    $scope.sets = Sets;
+    $scope.sets.$loaded().then(function() {
+      $scope.nbSets = $scope.sets.length;
+      for (var i= 0; i < $scope.nbSets; i++)  {
+          $scope.sets[i].marge = isCompatible(set, $scope.sets[i]);
+          $scope.resultC.push($scope.sets[i]);
+      }
+      $scope.setsResult.bool = true;
+    });
   }
 });
 
@@ -242,7 +258,7 @@ app.controller('ContactCtrl', function($scope, $firebase, $rootScope, $location,
   }
 });
 
-app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, $http, Builds, currentAuth) {
+app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, $http, Builds, currentAuth, moment) {
   $rootScope.loading = true;
   $scope.builds = Builds(currentAuth.uid);
   $scope.builds.$loaded().then(function() {
@@ -256,6 +272,7 @@ app.controller('BuildsCtrl', function($scope, $firebase, $rootScope, $location, 
     $scope.newBuild = {
       "type": parseInt(id),
       "titre": "Nouveau build",
+      "level": 200,
       "dateCrea": new Date().getTime()
     };
     $scope.builds.$add($scope.newBuild).then(function(ref) {
@@ -461,6 +478,50 @@ app.controller('BuildEditCtrl', function($scope, $firebase, $rootScope, $locatio
         });
       });
     }
+  }
+
+  $scope.calculPtsRestants = function(lvl, stats) {
+    if(lvl && stats) {
+      var pts = (lvl - 1) * 5;
+      for (var e in stats) {
+        var base = stats[e].base || 0;
+        if (e == 'vi') {
+          pts = pts - base * 1;
+        }
+        else if ( e == 'sa') {
+          pts = pts - base * 3;
+        }
+        else if (base < 101) {
+          pts = pts - base;
+        }
+        else if (base < 201) {
+          pts = pts - 2 * base + 100;
+        }
+        else if (base < 301) {
+          pts = pts - 3 * base + 300;
+        }
+        else if (base < 401) {
+          pts = pts - 4 * base + 600;
+        }
+      }
+      return pts;
+    }
+  }
+  $scope.typeSelector = {
+    "bool" : false
+  }
+
+  $scope.changeType = function(type) {
+    if(type > 0 && type < 17) {
+      $scope.build.type = type;
+      $scope.typeSelector.bool = false;
+    }
+    $scope.build.$save().then(function(ref) {
+      $rootScope.db.ref('builds').child(currentAuth.uid).child($scope.build.$id).child('type').set(type, function(error) {
+      });
+    }, function(err) {
+      console.log(err);
+    });
   }
 });
 

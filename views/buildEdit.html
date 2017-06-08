@@ -2,7 +2,6 @@
 
 <div id="buildEdit">
   <back-button back="Retour à la liste des builds"></back-button>
-
   <div id="infoUi" ng-if="$root.ui['infos'].bool == 'true'">
     Modification d'informations principales
     <label>Titre</label>
@@ -10,18 +9,31 @@
     <label>Type</label>
     <input ng-model="build.type" />
     <label>Lvl</label>
-    <input ng-model="build.level" />
+    <input type="number" ng-model="build.level"  min="0" max="200" />
     <div id="basicStats">
       <ul>
         <li ng-repeat="(key, stat) in build.stats">
-          <input type="number" ng-model="build.stats[key].base" ng-change="build.$save()" min="0" max="5000"/>
+          <input type="number" ng-model="build.stats[key].base" ng-change="build.$save()" min="0" max="5000"/>{{key}}
           <input type="number" ng-model="build.stats[key].bonus" ng-change="updateBox(key)" ng-init="updateBox(key)" min="0" max="100"/>
           <input type="checkbox" ng-model="bonus[key]" ng-change="updateStats(key)"/>
         </li>
         <input ng-change="toggleAll()" type="checkbox" ng-model="bonus['all']" />
       </ul>
+      Restants : {{calculPtsRestants(build.level, build.stats)}}
     </div>
-
+    <div ng-click="typeSelector.bool = true">
+      {{build.type}}
+    </div>
+    <div ng-show="typeSelector.bool">
+      <div ng-click="typeSelector.bool = false">
+        x
+      </div>
+      <ul>
+        <li ng-click="changeType(key)" ng-repeat="(key,val) in $root.listType">
+          {{val}}
+        </li>
+      </ul>
+    </div>
     <button ng-click="save()">Sauvegarder</button>
   </div>
 

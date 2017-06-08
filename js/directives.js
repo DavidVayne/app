@@ -29,6 +29,7 @@ function conditions(items, stats)  {
 }
 
 function calculateurDmg(element, value, stats)  {
+  console.log(stats);
   if(element == 'neu') {
     return value + value * ((stats['fo'].max + stats['pui'].max)/100) + stats['do'].max + stats['do' + element].max;
   }
@@ -137,7 +138,7 @@ app.directive("statsTemplate", function($location, $http) {
       $scope.spellToShow = null;
       $scope.stats = COMPLETE_STATS;
       $scope.$watch("build",function(newValue,oldValue) {
-        $scope.calculatedStats = calculStats($scope.build, $scope.stats);
+        $scope.calculatedStats = calculStats($scope.build, $scope.stats.stats);
         $scope.conditionsResult = conditions($scope.build.items, $scope.calculatedStats);
         if($scope.conditionsResult.length > 0) {
           $scope.conditionBool = true;
@@ -145,7 +146,7 @@ app.directive("statsTemplate", function($location, $http) {
       }, true);
 
       $scope.calculDmg = function(element, value)  {
-        calculateurDmg(element,value, $scope.calculatedStats);
+        return calculateurDmg(element,value, $scope.calculatedStats);
       }
 
       $scope.updateSpellToShow = function(spell) {

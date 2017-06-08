@@ -55,6 +55,14 @@
         "footer" : true,
         "header" : true,
         "auth" : true
+      },
+      "compatible" : {
+        "titre" : "Sets C",
+        "description": "Tester la compatibilité entre sets",
+        "url" : "/#/compatible",
+        "footer" : true,
+        "header" : true,
+        "auth" : true
       }
   }
 }

@@ -4,6 +4,56 @@
    return true;
 }*/
 
+function isCompatible(set1, set2) {
+  return compatible(intersect(set1.tableTypes, set2.tableTypes));
+}
+
+Array.prototype.diff = function(a) {
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
+};
+
+function intersect(a, b) {
+    var t;
+    if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+    return a.filter(function (e) {
+        return b.indexOf(e) > -1;
+    });
+}
+
+function getItems(arr1, arr2) {
+  var items = arr1.concat(arr2);
+  $http.get('items.json').then(function(result) {
+    console.log(result);
+  });
+}
+
+function compatible(array) {
+  var l = array.length;
+  var a = 4; // valeur de l'anneau
+  // retourner le tableau ainsi que la valeur pour mettre en surbrillance les combinaisons impossibles
+  if (l == 0) {
+    return 0; // compatible
+  }
+  if (l == 1 && (array[0] == a) ) {
+    return 0; // compatible parce qu'anneau
+  }
+  if (l == 1) {
+    return 1; // incompatible à un item
+  }
+  if (l == 2 && (array[0] == a || array[1] == a) ) {
+    return 1; //incompatible à un item;
+  }
+  if (l == 2) {
+    return 2;
+  }
+  else {
+    return l;
+  }
+}
+
+
+
+
 function getName(authData) {
   switch (authData.providerData[0].providerId) {
     case 'password':
@@ -53,7 +103,6 @@ app.run(["$rootScope", "$location", function($rootScope, $location, amMoment) {
       $location.path("/home");
     }
   });
-  amMoment.changeLocale('fr');
 }]);
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
